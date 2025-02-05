@@ -1,0 +1,13 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "Todura V3",
+  "outputfilename": "todura-v3",
+  "frontend:install": "yarn install",
+  "frontend:build": "yarn build",
+  "frontend:dev:watcher": "yarn dev",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "M1dnight",
+    "email": "108243683+M1dnight-ofcl@users.noreply.github.com"
+  }
+}

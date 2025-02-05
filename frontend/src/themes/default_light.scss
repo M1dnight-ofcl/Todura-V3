@@ -1,0 +1,72 @@
+@import url('https://fonts.cdnfonts.com/css/orbiter-fbs-trial');
+@import url('https://fonts.cdnfonts.com/css/jetbrains-mono-2');
+.default_light {
+    /*base colors*/
+    --bg1: #ffffff;
+    --bg2: #f0f0f0;
+    --bg3: #d0d0d0;
+    --bg4: #c0c0c0;
+    --bg5: #b5b5b5;
+    --ui1: #f0f0f0;
+    --ui2: #e5e5e5;
+    --ui3: #e0e0e0;
+    --ui4: #d0d0d0;
+    --ui5: #c0c0c0;
+    --h1: #101010;
+    --h2: #151515;
+    --p1: #171717;
+    --p2: #191919;
+    --p3: #212121;
+    /*others*/
+    --disabled: #505050;
+    --navbar: var(--bg4);
+    --active: #8745f1;
+    --transition-time: .35s;
+    --border-rad: 10px;
+    --font: 'Orbiter FBS Trial', sans-serif;
+    --font-monospace: 'JetBrains Mono', sans-serif;
+    --outline: #a0a0a045;
+    --outline-active: #6f27e4;
+    --sbicons: #35353545;
+    --color-scheme: light;
+    /*clrs*/
+    --clr0: #303030;
+    --clr1: #dc3939;
+    --clr2: #dc7239;
+    --clr3: #ebca13;
+    --clr4: #47e632;
+    --clr5: #2789ec;
+    --clr6: #8745f1;
+    --clr7: #dd32e6;
+    /*context menu vars*/
+    --contexify-menu-bgColor: var(--ui1);
+    --contexify-separator-color: var(--outline);
+    --contexify-item-color: var(--p1);
+    --contexify-activeItem-color: var(--h1);
+    --contexify-activeItem-bgColor: var(--active);
+    --contexify-rightSlot-color: #aaaaaa;
+    --contexify-activeRightSlot-color: #fff;
+    --contexify-arrow-color: var(--p3);
+    --contexify-activeArrow-color: var(--h1);
+    --contexify-zIndex: 666;
+    --contexify-menu-padding: .5rem;
+    --contexify-itemContent-padding: .5rem;
+    --contexify-menu-radius: var(--border-rad);
+    --contexify-activeItem-radius: calc((var(--border-rad) / 4) * 3);
+    --contexify-menu-minWidth: 8rem;
+    --contexify-menu-shadow: 0 0 1rem var(--bg1), 0 0 .5rem var(--bg1);
+    .contexify{border: 1px solid var(--outline);}
+    /*toastify*/
+    --toastify-color-dark: var(--ui1);
+    --toastify-color-info: var(--clr5);
+    --toastify-color-success: var(--clr4);
+    --toastify-color-warning: var(--clr3);
+    --toastify-color-error: var(--clr1);
+    --toastify-text-color-dark: var(--h1);
+    --toastify-toast-width: 18rem;
+    --toastify-toast-min-height: 4rem;
+    --toastify-toast-max-height: 15rem;
+    --toastify-font-family: var(--font);
+    --toastify-z-index: 8940;
+    .Toastify__toast{border: 1px var(--outline) solid;}
+}

@@ -1,0 +1,77 @@
+@use "./theme.scss";
+//-----------------
+#AppWrapper {
+  height: 100dvh;
+  width: 100dvw;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background: theme.$bg1;
+}
+
+.List {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  // padding: .25rem;
+  gap: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: 4.5rem;
+  background: theme.$bg3;
+  border-right: theme.$outline;
+  .Tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    margin: 0;
+    outline: 0;
+    background: none;
+    appearance: none;
+    font-family: theme.$font;
+    color: theme.$p3;
+    font-family: inherit;
+    font-size: 2rem;
+    height: 4.5rem;
+    aspect-ratio: 1 / 1;
+    user-select: none;
+    transition: .35s;
+    &[data-selected] {
+      color: theme.$h1;
+    }
+    &:hover {
+      color: theme.$active;
+    }
+  }
+  .Indicator {
+    position: absolute;
+    z-index: -1;
+    left: 50%;
+    top: .5rem;
+    translate: -50% calc(var(--active-tab-top));
+    width: 3.5rem;
+    aspect-ratio: 1 / 1;
+    border-radius: theme.$border-rad;
+    background: theme.$ui1;
+    transition-property: translate, width, background, border-radius;
+    transition-duration: 200ms;
+    box-sizing: border-box;
+    transition-timing-function: ease-in-out;
+  }
+}
+.Panel {
+  position: fixed;
+  top: 0%;
+  left: 4.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100dvh;
+  width: calc(100dvw - 4.5rem);
+  outline: 0;
+  font-family: theme.$font !important;
+}

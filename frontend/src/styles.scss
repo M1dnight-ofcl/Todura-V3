@@ -1,0 +1,12 @@
+@use "./theme.scss";
+@use "./themes/default_dark.scss";
+@use "./themes/default_light.scss";
+//-----------------
+#root {
+  isolation: isolate;
+  padding: unset;
+  margin: unset;
+  box-sizing: border-box;
+  border: unset;
+  outline: none;
+}
