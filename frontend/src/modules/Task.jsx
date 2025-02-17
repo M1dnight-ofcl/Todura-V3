@@ -1,12 +1,14 @@
 import { motion, Reorder, useDragControls } from "motion/react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Collapsible, Checkbox  } from "@base-ui-components/react";
-import { faGripVertical } from "@fortawesome/free-solid-svg-icons";
+import { Collapsible, Checkbox, Dialog } from "@base-ui-components/react";
+import { faDeleteLeft, faEdit, faGripVertical, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useAtom } from "jotai";
 import { tasks as _tasks } from "../store/store";
+import { taskEditOpenAtom } from "./Home";
 import _ from "lodash";
 export const Task=({data,index})=>{
   const[tasks,setTasks]=useAtom(_tasks);
+  const[taskEditOpen,setTaskEditOpen]=useAtom(taskEditOpenAtom);
   const dragctrl=useDragControls();
   const CheckIcon=(props)=>{
     return(<svg fill="currentcolor" width="10" height="10" viewBox="0 0 10 10" {...props}>
@@ -55,7 +57,28 @@ export const Task=({data,index})=>{
                 className="TaskDesc">{data.desc}</motion.p>  
             </motion.div>
             <motion.div className="TaskInfoWrapper">
-              
+              <motion.div className="TaskOptionsWrapper">
+                <motion.div 
+                  transition={{duration:.25,delay:.25}}
+                  initial={{y:5,scale:1,opacity:0,}}
+                  whileInView={{y:0,scale:1,opacity:1,}}
+                  onClick={(e)=>{
+                    e.preventDefault();
+                    setTasks(tasks.filter(task=>task.id!==data.id));
+                  }}
+                  className="TaskOptIco">
+                    <FontAwesomeIcon icon={faTrash}/></motion.div>
+                <motion.div
+                  transition={{duration:.25,delay:.35}}
+                  initial={{y:5,scale:1,opacity:0,}}
+                  whileInView={{y:0,scale:1,opacity:1,}}
+                  onClick={(e)=>{
+                    e.preventDefault();
+                    setTaskEditOpen({open:true,data});
+                  }}
+                  className="TaskOptIco">
+                    <FontAwesomeIcon icon={faEdit}/></motion.div>
+              </motion.div>
             </motion.div>
         </motion.div>
     </Reorder.Item>

@@ -9,8 +9,11 @@
   font-size: 1.5rem;
   color: theme.$p3;
   aspect-ratio: 1 / 1;
-  bottom: 1rem;
-  right: 1rem;
+  bottom: .875rem;
+  right: .875rem;
+  box-shadow: 
+    0 0 2rem theme.$bg1,
+    0 0 1rem theme.$bg1;
   transition: .25s;
   z-index: 99;
   cursor: pointer;
@@ -18,24 +21,81 @@
     background: theme.$active;
     border: theme.$outline-active;
     color: theme.$h1;
-    scale: 115%;
   }
 }
-#TaskDisplayWrapper {
-  // background: pink;
-  height: fit-content;
-  min-height: 25vmin;
-  max-height: calc(100% - 6rem);
-  overflow-x: hidden;
-  overflow-y: auto;
-  width: 35rem;
-  position: fixed;
-  top: 3rem;
-  left: 50%;
-  translate: calc(-50% + (4.5rem / 2)) 0;
-  &::-webkit-scrollbar {display: none;}
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+#HomePageFlexboxWrapper {
+  height: 100dvh;
+  width: calc(100dvw - 6.5rem);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  #TaskEditWrapper {
+    height: calc(100dvh - 3rem);
+    // flex-grow: 1;
+    flex: 0 1 auto;
+    min-width: 200px;
+    transition: .35s;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    &.closed {
+      opacity: 0 !important;
+      min-width: 0 !important;
+      flex: 0 1 0 !important;
+      // flex-grow: 0 !important;
+    }
+    .ContentWrapper {
+      box-sizing: border-box;
+      border: theme.$outline;
+      background-color: theme.$ui1;
+      height: calc(100% - .5rem);
+      width: calc(100% - 1rem);
+      border-radius: theme.$border-rad;
+      position: relative;
+      .ResizeBar {
+        height: 100%;
+        width: .75rem;
+        background: theme.$ui5;
+        border-radius: theme.$border-rad;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: theme.$p5;
+        opacity: 0;
+        transition: opacity .35s;
+        cursor: col-resize !important;
+        position: absolute;
+        left: 0;
+        top: 50%;
+        translate: 0 -50%;
+        &:hover {
+          opacity: .35;
+        }
+      }
+    }
+  }
+  #TaskDisplayWrapper {
+    // background: pink;
+    // height: fit-content;
+    box-sizing: border-box;
+    min-height: 25vmin;
+    height: calc(100dvh - 3rem);
+    flex: 1 1 35rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: max-content;
+    min-width: 22.5rem;
+    max-width: 35rem;
+    position: relative;
+    /* position: fixed;
+    top: 3rem;
+    left: 50%;
+    translate: calc(-50% + (4.5rem / 2)) 0; */
+    &::-webkit-scrollbar {display: none;}
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 .CategoryWrapper {
   height: fit-content;
@@ -60,6 +120,8 @@
       padding: 1rem;
       border-radius: theme.$border-rad;
       background: theme.$ui1;
+      // box-sizing: border-box;
+      border: theme.$outline;
       color: theme.$p3;
       font-family: inherit;
       font-size: 1.5rem;
@@ -108,6 +170,8 @@
 }
 .Task {
   background: theme.$ui1;
+  box-sizing: border-box !important;
+  border: theme.$outline;
   border-radius: calc((theme.$border-rad * 3) / 4);
   padding: 1rem;
   padding-left: 4.65rem !important;
@@ -194,5 +258,33 @@
   .TaskInfoWrapper {
     width: 6rem;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    .TaskOptionsWrapper {
+      widows: 100%;
+      height: 1.15rem;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-direction: row;
+      gap: 1px;
+      .TaskOptIco {
+        font-size: 1rem;
+        height: 100%;
+        aspect-ratio: 1 / 1;
+        color: theme.$p4;
+        display: flex;
+        justify-content: center; 
+        justify-content: center; 
+        align-items: center;
+        cursor: pointer;
+        transition: .25s;
+        &:hover {
+          color: theme.$p1;
+        }
+      }
+    }
   }
 }
