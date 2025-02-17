@@ -3,9 +3,9 @@ import { Greet } from "../wailsjs/go/main/App";
 import { Tabs } from '@base-ui-components/react/tabs';
 import { motion } from "motion/react";
 import "./styles.scss";
-import "./home.scss";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear, faHome } from '@fortawesome/free-solid-svg-icons';
+import { Home } from './modules/Home';
 const App=()=>{
   return (<>
     <motion.div id="AppWrapper" className="default_dark">
@@ -16,7 +16,7 @@ const App=()=>{
           <Tabs.Indicator className="Indicator" />
         </Tabs.List>
         <Tabs.Panel className="Panel" value="home">
-
+          <Home />
         </Tabs.Panel>
         <Tabs.Panel className="Panel" value="settings">
           

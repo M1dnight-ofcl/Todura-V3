@@ -1,77 +1,198 @@
 @use "./theme.scss";
 //-----------------
-#AppWrapper {
-  height: 100dvh;
-  width: 100dvw;
+#CreateNewTaskButton {
   position: fixed;
-  top: 50%;
+  height: 3.5rem;
+  border-radius: theme.$border-rad;
+  background: theme.$ui1;
+  border: theme.$outline;
+  font-size: 1.5rem;
+  color: theme.$p3;
+  aspect-ratio: 1 / 1;
+  bottom: 1rem;
+  right: 1rem;
+  transition: .25s;
+  z-index: 99;
+  cursor: pointer;
+  &:hover {
+    background: theme.$active;
+    border: theme.$outline-active;
+    color: theme.$h1;
+    scale: 115%;
+  }
+}
+#TaskDisplayWrapper {
+  // background: pink;
+  height: fit-content;
+  min-height: 25vmin;
+  max-height: calc(100% - 6rem);
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 35rem;
+  position: fixed;
+  top: 3rem;
   left: 50%;
-  transform: translate(-50%,-50%);
-  background: theme.$bg1;
+  translate: calc(-50% + (4.5rem / 2)) 0;
+  &::-webkit-scrollbar {display: none;}
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-
-.List {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  // padding: .25rem;
-  gap: 0;
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100dvh;
-  width: 4.5rem;
-  background: theme.$bg3;
-  border-right: theme.$outline;
-  .Tab {
+.CategoryWrapper {
+  height: fit-content;
+  width: 100%;
+  margin: .75rem 0;
+  &:first-child {margin-top: 0 !important;}
+  &:last-child {margin-bottom: 0 !important;}
+  .Category {
     display: flex;
-    align-items: center;
+    width: 100%;
+    min-height: fit-content;
+    flex-direction: column;
     justify-content: center;
-    border: 0;
-    margin: 0;
-    outline: 0;
-    background: none;
-    appearance: none;
-    font-family: theme.$font;
     color: theme.$p3;
-    font-family: inherit;
-    font-size: 2rem;
-    height: 4.5rem;
-    aspect-ratio: 1 / 1;
-    user-select: none;
-    transition: .35s;
-    &[data-selected] {
-      color: theme.$h1;
+    .CategoryTrigger {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0;
+      border: 0;
+      outline: 0;
+      padding: 1rem;
+      border-radius: theme.$border-rad;
+      background: theme.$ui1;
+      color: theme.$p3;
+      font-family: inherit;
+      font-size: 1.5rem;
+      height: 3rem;
+      line-height: 1.25rem;
+      font-weight: 500;
+      &:hover {background: theme.$ui4;}
+      &:focus-visible {outline: 2px solid theme.$active;}
+      &[data-panel-open] .Icon{transform: rotate(90deg);}
+      .Icon {
+        width: 1rem;
+        height: 1rem;
+        transition: transform 150ms ease-out;
+      }
     }
-    &:hover {
-      color: theme.$active;
+    .CategoryPanel {
+      display: flex;
+      height: var(--collapsible-panel-height);
+      flex-direction: column;
+      justify-content: end;
+      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
+      &::-webkit-scrollbar {display: none;}
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      max-height: 20rem;
+      font-size: 1rem;
+      line-height: 1.25rem;
+      transition: all 150ms ease-out;
+      &[data-starting-style],
+      &[data-ending-style] {
+        height: 0;
+      }
+      .CategoryContents {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        margin-top: 0.25rem;
+        border-radius: theme.$border-rad;
+        // background-color: theme.$ui1;
+        cursor: text;
+      }
     }
-  }
-  .Indicator {
-    position: absolute;
-    z-index: -1;
-    left: 50%;
-    top: .5rem;
-    translate: -50% calc(var(--active-tab-top));
-    width: 3.5rem;
-    aspect-ratio: 1 / 1;
-    border-radius: theme.$border-rad;
-    background: theme.$ui1;
-    transition-property: translate, width, background, border-radius;
-    transition-duration: 200ms;
-    box-sizing: border-box;
-    transition-timing-function: ease-in-out;
   }
 }
-.Panel {
-  position: fixed;
-  top: 0%;
-  left: 4.5rem;
+.Task {
+  background: theme.$ui1;
+  border-radius: calc((theme.$border-rad * 3) / 4);
+  padding: 1rem;
+  padding-left: 4.65rem !important;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100dvh;
-  width: calc(100dvw - 4.5rem);
-  outline: 0;
-  font-family: theme.$font !important;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: row;
+  position: relative;
+  cursor: default;
+  .dragControls {
+    cursor: grab;
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    left: .5rem;
+    font-size: 1rem;
+    color: theme.$p5;
+    opacity: .35;
+    &:active{
+      cursor: grabbing;
+    }
+  }
+  .TaskCheckmarkWrapper {
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    left: 1.65rem;
+    width: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: .75rem;
+    .Checkmark {
+      box-sizing: border-box;
+      display: flex;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      align-items: center;
+      justify-content: center;
+      border-radius: calc((theme.$border-rad * 3) / 4);
+      outline: 0;
+      padding: 0;
+      margin: 0;
+      transition: background .15s, border .25s;
+      border: 1px solid transparent;
+      cursor: pointer;
+      &[data-unchecked] {
+        border: theme.$outline;
+        background: transparent;
+      }
+      &[data-checked] {
+        border-width: 0px;
+        background: theme.$active;
+      }
+      .CheckmarkIndicator {
+        display: flex;
+        color: theme.$p3;
+        &[data-unchecked] {display: none;}
+        .CheckmarkIcon {
+          width: .85rem;
+          height: .85rem;
+        }
+      }
+    }
+  }
+  .TaskDetailsWrapper {
+    flex-grow: 1;
+    padding: .25rem 0;
+    .TaskTitle {
+      font-size: 1.5rem;
+      margin: .25rem 0;
+      margin-top: 0;
+      font-weight: 400;
+      color: theme.$p3;
+    }
+    .TaskDesc {
+      font-size: .925rem;
+      margin: 0;
+      font-weight: 300;
+      color: theme.$p4;
+    }
+  }
+  .TaskInfoWrapper {
+    width: 6rem;
+    height: 100%;
+  }
 }
