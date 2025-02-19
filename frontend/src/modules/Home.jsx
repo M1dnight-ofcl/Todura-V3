@@ -1,8 +1,16 @@
 import { motion, Reorder, AnimatePresence, useMotionValue } from "motion/react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Collapsible } from "@base-ui-components/react";
+import { 
+  Collapsible, 
+  Popover, 
+  Dialog, 
+  Fieldset, 
+  Field, 
+  Separator, 
+  Select 
+} from "@base-ui-components/react";
 import "../home.scss";
-import { faGripLinesVertical, faPlus, faTasksAlt } from "@fortawesome/free-solid-svg-icons";
+import { faClose, faGripLinesVertical, faListCheck, faPlus, faSquareCheck, faTasksAlt } from "@fortawesome/free-solid-svg-icons";
 import { categories as _categories, tasks as _tasks } from "../store/store";
 import { atom, useAtom } from "jotai";
 import { useEffect, useState, useCallback, useReducer } from "react";
@@ -84,14 +92,18 @@ export const Home=({})=>{
             dragConstraints={{top:0,left:0,right:0,bottom:0}}
             dragElastic={0}
             onDrag={handleDrag}
-            onDragEnd={() => {
-              setIsDragging(false);
-            }}
-            onDragStart={() => {
-              setIsDragging(true);
-            }}
+            onDragEnd={()=>{setIsDragging(false);}}
+            onDragStart={()=>{setIsDragging(true);}}
             dragMomentum={false}>
               <FontAwesomeIcon icon={faGripLinesVertical} />
+          </motion.div>
+          <motion.div
+            id="TaskEditClose"
+            onClick={()=>{setTaskEditOpen({open:false,data:{}});}}
+            transition={{duration:.15}}
+            initial={{y:5,scale:1,opacity:0,}}
+            whileInView={{y:0,scale:1,opacity:1,}}>
+              <FontAwesomeIcon icon={faClose} />
           </motion.div>
         </motion.div>
     </motion.div>);
@@ -115,20 +127,58 @@ export const Home=({})=>{
       </motion.div>
       <TaskEdit/>
     </div>
-    <motion.button
-      transition={{duration:.15}}
-      initial={{
-        y:5,
-        scale:1,
-        opacity:0,
-      }}
-      whileInView={{
-        y:0,
-        scale:1,
-        opacity:1,
-      }}
-      id="CreateNewTaskButton">
+    <Popover.Root>
+      <Popover.Trigger id="CreateNewTaskButton">
         <FontAwesomeIcon icon={faPlus} />
-    </motion.button>
+      </Popover.Trigger>
+      <Popover.Portal>
+        <Popover.Positioner sideOffset={8} align="end" >
+          <Popover.Popup className="TaskCreatePopover default_dark">
+            <motion.div
+              transition={{duration:.15, delay: .15}}
+              initial={{x:5,scale:1,opacity:0,}}
+              whileInView={{x:0,scale:1,opacity:1,}}>
+                <Dialog.Root>
+                  <Dialog.Trigger className="DiagTrigger">
+                    <FontAwesomeIcon className="Icon" icon={faSquareCheck} /> Create Task</Dialog.Trigger>
+                  <Dialog.Portal keepMounted>
+                    <Dialog.Backdrop className="DiagBackdrop default_dark" />
+                    <Dialog.Popup className="DiagPopup default_dark">
+                      <Fieldset.Root className="TaskCreateFS">
+                        <Fieldset.Legend className="FSHeader">Create Task</Fieldset.Legend>
+                        {/* <Separator className="FSSeparator" /> */}
+                        <Field.Root className="TaskCreateField">
+                          <Field.Label className="Label">Task Title</Field.Label>
+                          <Field.Control id="TaskCreateTitleInput" placeholder="Enter Task Title" className="Input" />
+                        </Field.Root>
+                        <Field.Root className="TaskCreateField">
+                          <Field.Label className="Label">Task Description</Field.Label>
+                          <Field.Control id="TaskCreateDescInput" placeholder="Enter Task Description" className="Input" />
+                        </Field.Root>
+                      </Fieldset.Root><br/>
+
+                      <motion.button
+                        className="TaskCreateButton"
+                        onClick={(e)=>{
+                          e.preventDefault();
+                        }}
+                        transition={{duration:.15,delay:.05}}
+                        initial={{y:5,scale:1,opacity:0,}}
+                        whileInView={{y:0,scale:1,opacity:1,}}>
+                          Create</motion.button>
+                    </Dialog.Popup>
+                  </Dialog.Portal>
+                </Dialog.Root>
+              </motion.div>
+
+            <motion.div
+              transition={{duration:.15, delay: .25}}
+              initial={{x:5,scale:1,opacity:0,}}
+              whileInView={{x:0,scale:1,opacity:1,}}>
+                <FontAwesomeIcon className="Icon" icon={faListCheck} /> Create Category</motion.div>
+          </Popover.Popup>
+        </Popover.Positioner>
+      </Popover.Portal>
+    </Popover.Root>
   </>);
 }
