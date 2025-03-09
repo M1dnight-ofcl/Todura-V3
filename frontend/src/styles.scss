@@ -13,12 +13,100 @@
 div[data-hidden], div[hidden] {
   pointer-events: none !important;
 }
-#AppWrapper {
-  height: 100dvh;
+$titleblockSize: 42px;
+#Titlebar {
+  height: $titleblockSize;
   width: 100dvw;
   position: fixed;
-  top: 50%;
+  top: calc($titleblockSize / 2);
   left: 50%;
+  z-index: 999;
+  // padding: 1px;
+  border: theme.$outline;
+  transform: translate(-50%,-50%);
+  background: theme.$bg3 !important;
+  --wails-draggable: drag;
+  #TBIcon {
+    $tbicos: 22px;
+    position: absolute;
+    top: 50%;
+    left: calc(($titleblockSize - $tbicos) / 2);
+    translate: 0 -50%;
+    height: $tbicos;
+    aspect-ratio: 1 / 1;
+    // background: white;
+    background-position: center;
+    background-size: contain;
+    background-image: url("/appicon-a.png");
+    transition: .35s;
+    /* &:hover {
+      scale: 125%;
+    } */
+  }
+  .SearchTrigger {
+    width: 50%;
+    height: 32px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: transparent;
+    appearance: none;
+    border: none;
+  }
+  #Search {
+    background: theme.$bg1;
+    border: theme.$outline;
+    border-radius: theme.$border-rad;
+    box-sizing: border-box;
+    padding: 4px 8px;
+    outline: none;
+    color: theme.$disabled;
+    font-size: .875rem;
+    text-align: center;
+    font-family: theme.$font;
+    &:focus {
+      text-align: left;
+    }
+  }
+  #ActionButtonWrapper {
+    position: absolute;
+    right: 0%;
+    top: 50%;
+    transform: translateY(-50%);
+    height: $titleblockSize;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row-reverse;
+    .ActionButton {
+      height: $titleblockSize;
+      aspect-ratio: 1 / 1;
+      border: none;
+      border-left: theme.$outline !important;
+      background-color: theme.$bg1;
+      // background: transparent;
+      color: theme.$disabled;
+      font-size: .875rem;
+      cursor: pointer;
+      transition: .35s;
+      &:hover {
+        background: theme.$ui1;
+      }
+      &#Close:hover {
+        background: theme.$clr1;
+      }
+    }
+  }
+}
+#AppWrapper {
+  &,*{--wails-draggable: no-drag !important;}
+  height: calc(100dvh - $titleblockSize);
+  width: 100dvw;
+  position: fixed;
+  left: 50%;
+  top: calc(50% + ($titleblockSize / 2));
   transform: translate(-50%,-50%);
   background: theme.$bg1;
 }
@@ -32,7 +120,7 @@ div[data-hidden], div[hidden] {
     position: fixed;
     top: 0;
     left: 0;
-    height: 100dvh;
+    height: calc(100dvh - $titleblockSize);
     width: 4.5rem;
     background: theme.$bg3;
     border-right: theme.$outline;
@@ -86,7 +174,7 @@ div[data-hidden], div[hidden] {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100dvh;
+    height: calc(100dvh - $titleblockSize);
     width: calc(100dvw - 4.5rem);
     outline: 0;
     font-family: theme.$font !important;

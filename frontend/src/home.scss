@@ -175,21 +175,21 @@
   }
 }
 #HomePageFlexboxWrapper {
-  height: 100dvh;
+  height: calc(100dvh - 42px);
   width: calc(100dvw - 6.5rem);
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   #TaskEditWrapper {
-    height: calc(100dvh - 3rem);
+    height: calc(100dvh - 3rem - 42px);
     // flex-grow: 1;
     flex: 0 1 auto;
     min-width: 200px;
     transition: .35s;
     display: flex;
     justify-content: flex-end;
-    align-items: flex-end;
+    align-items: center;
     pointer-events: all;
     user-select: auto;
     &.closed {
@@ -223,7 +223,7 @@
       box-sizing: border-box;
       border: theme.$outline;
       background-color: theme.$ui1;
-      height: calc(100% - .5rem);
+      height: 100%;
       width: calc(100% - 1rem);
       border-radius: theme.$border-rad;
       position: relative;
@@ -253,14 +253,13 @@
     // background: pink;
     // height: fit-content;
     box-sizing: border-box;
-    min-height: 25vmin;
-    height: calc(100dvh - 3rem);
+    height: calc(100dvh - 3rem - 42px) !important;
     flex: 1 1 35rem;
     overflow-x: hidden;
     overflow-y: auto;
     width: max-content;
     min-width: 22.5rem;
-    max-width: 35rem;
+    max-width: 100%;
     position: relative;
     /* position: fixed;
     top: 3rem;
