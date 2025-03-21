@@ -19,21 +19,23 @@ const App=()=>{
     const[categories,_1]=useAtom(_categories);
     const[tasks,_2]=useAtom(_tasks);
     const[SearchRes,setSearchRes]=useState([...tasks]);
+    const[SearchPrompt,setSearchPrompt]=useState("");
     return(<div id="Titlebar"  data-wails-drag>
       <motion.div id="TBIcon"></motion.div>
       <motion.div id="ActionButtonWrapper">
-        {/* window.runtime.WindowMinimise() */}
-        <motion.button id="Close" className='ActionButton'
-          onClick={()=>{window.runtime.Quit();}}>
-            <FontAwesomeIcon icon={faClose}/></motion.button>
-        <motion.button id="Maximize" className='ActionButton'
-          onClick={()=>{
-            window.runtime.WindowToggleMaximise();
-            setMaximized(!maximized);
-          }}><FontAwesomeIcon icon={maximized?faCompress:faExpand}/></motion.button>
-        <motion.button id="Minimize" className='ActionButton'
-          onClick={()=>{window.runtime.WindowMinimise();}}>
-            <FontAwesomeIcon icon={faMinus}/></motion.button>
+        {window.runtime?<>
+          <motion.button id="Close" className='ActionButton'
+            onClick={()=>{window.runtime.Quit();}}>
+              <FontAwesomeIcon icon={faClose}/></motion.button>
+          <motion.button id="Maximize" className='ActionButton'
+            onClick={()=>{
+              window.runtime.WindowToggleMaximise();
+              setMaximized(!maximized);
+            }}><FontAwesomeIcon icon={maximized?faCompress:faExpand}/></motion.button>
+          <motion.button id="Minimize" className='ActionButton'
+            onClick={()=>{window.runtime.WindowMinimise();}}>
+              <FontAwesomeIcon icon={faMinus}/></motion.button>
+        </>:null}
       </motion.div>
       <Dialog.Root>
         <Dialog.Trigger className="SearchTrigger">
@@ -46,14 +48,17 @@ const App=()=>{
           <Dialog.Backdrop className="SearchBackdrop" />
           <Dialog.Popup id="SearchPopup" >
             <Input placeholder='Search' id="Search" onChange={(e)=>{
-
+              setSearchPrompt(e.target.value);
+              setSearchRes(tasks.values().filter(item=>JSON.stringify(item)
+                .toLowerCase()
+                .includes(e.target.value.toLowerCase())));
             }} />
-            <motion.div className='SearchGroup' id="SearchProperties">
+            {SearchPrompt===""?<motion.div className='SearchGroup' id="SearchProperties">
               {categories.map((data)=>
                 <motion.div key={data.id} className='SearchResult'>
                   <span className='SRType Category'>Category</span><span className='SRScope Category'>{data.title}</span>
                 </motion.div>)}
-            </motion.div>
+            </motion.div>:null}
             <motion.div className='SearchGroup' id="SearchResults">
               {SearchRes.map((data)=>
                 <motion.div key={data.id} className='SearchResult'>

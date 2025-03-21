@@ -11,11 +11,12 @@ import {
 } from "@base-ui-components/react";
 import "../home.scss";
 import { faClose, faGripLinesVertical, faListCheck, faPlus, faSquareCheck, faTasksAlt } from "@fortawesome/free-solid-svg-icons";
-import { categories as _categories, tasks as _tasks } from "../store/store";
+import { categories as _categories, tasks as _tasks, tasks } from "../store/store";
 import { atom, useAtom } from "jotai";
 import { useEffect, useState, useCallback, useReducer } from "react";
 import { Task } from "./Task";
 import _ from "lodash";
+import { generateId } from "./lib";
 export const taskEditOpenAtom=atom({open:false,data:{}});
 export const Home=({})=>{
   const[categories,setCategories]=useAtom(_categories);
@@ -108,6 +109,138 @@ export const Home=({})=>{
         </motion.div>
     </motion.div>);
   }
+  const TaskCreateButtonPopup=()=>{
+    const[taskCreateCategory,_stcc]=useState("");
+    const[tasks,setTasks]=useAtom(_tasks);
+    const SelectCategory=()=>{
+      function ChevronUpDownIcon(props){return(
+        <svg width="8" height="12" viewBox="0 0 8 12" fill="none" stroke="currentcolor"strokeWidth="1.5"{...props}>
+          <path d="M0.5 4.5L4 1.5L7.5 4.5" />
+          <path d="M0.5 7.5L4 10.5L7.5 7.5" />
+        </svg>);}
+      function CheckIcon(props){return(
+        <svg fill="currentcolor" width="10" height="10" viewBox="0 0 10 10" {...props}>
+          <path d="M9.1603 1.12218C9.50684 1.34873 9.60427 1.81354 9.37792 2.16038L5.13603 8.66012C5.01614 8.8438 4.82192 8.96576 4.60451 8.99384C4.3871 9.02194 4.1683 8.95335 4.00574 8.80615L1.24664 6.30769C0.939709 6.02975 0.916013 5.55541 1.19372 5.24822C1.47142 4.94102 1.94536 4.91731 2.2523 5.19524L4.36085 7.10461L8.12299 1.33999C8.34934 0.993152 8.81376 0.895638 9.1603 1.12218Z" />
+        </svg>);}
+      return(
+        <Select.Root onValueChange={(e)=>{_stcc(e);}}>
+          <Select.Trigger className="Select">
+            <Select.Value placeholder="Sans-serif" />
+            <Select.Icon className="SelectIcon">
+              <ChevronUpDownIcon />
+            </Select.Icon>
+          </Select.Trigger>
+          <Select.Portal>
+            <Select.Positioner 
+              className="SelectPositioner" 
+              positionMethod="fixed" 
+              align="center"
+              alignOffset={8}
+              side="bottom">
+                <Select.Popup className="SelectPopup">
+                  {categories.map((data,index)=>
+                    <Select.Item className="Item" key={index} value={data.catid}>
+                      <Select.ItemIndicator className="ItemIndicator">
+                        <CheckIcon className="IndicatorIcon" />
+                      </Select.ItemIndicator>
+                      <Select.ItemText className="Text">{data.title}</Select.ItemText>
+                    </Select.Item>)}
+                </Select.Popup>
+                <Select.ScrollDownArrow className="ScrollArrow" />
+            </Select.Positioner>
+          </Select.Portal>
+        </Select.Root>
+      );
+    }
+    const[isTaskTitleBlank,_sittb]=useState(false);
+    const[isTaskDescBlank,_sitdb]=useState(false);
+    return(<Dialog.Root>
+      <Dialog.Trigger className="DiagTrigger">
+        <FontAwesomeIcon className="Icon" icon={faSquareCheck} /> Create Task</Dialog.Trigger>
+      <Dialog.Portal keepMounted>
+        <Dialog.Backdrop className="DiagBackdrop default_dark" />
+        <Dialog.Popup className="DiagPopup default_dark">
+          <Fieldset.Root className="TaskCreateFS">
+            <Fieldset.Legend className="FSHeader">Create Task</Fieldset.Legend>
+            {/* <Separator className="FSSeparator" /> */}
+            <Field.Root className="TaskCreateField">
+              <Field.Label className="Label">Task Title</Field.Label>
+              <Field.Control 
+                id="TaskCreateTitleInput"
+                placeholder="Enter Task Title" 
+                className="Input"
+                autoComplete="off"
+                onKeyDown={(e)=>{
+                  if(e.target.value!=""&&isTaskTitleBlank)_sittb(false);
+                  switch(e.key){
+                    case"Enter":case"ArrowDown":
+                      document.getElementById("TaskCreateDescInput").focus();break;
+                  }
+                }}/>
+                <Field.Error 
+                  className="FieldError"
+                  forceShow={isTaskTitleBlank}
+                  match="valueMissing">Required</Field.Error>
+            </Field.Root>
+            <Field.Root className="TaskCreateField">
+              <Field.Label className="Label">Task Description</Field.Label>
+              <Field.Control 
+                id="TaskCreateDescInput" 
+                placeholder="Enter Task Description" 
+                className="Input"
+                autoComplete="off"
+                onKeyDown={(e)=>{
+                  if(e.target.value!=""&&isTaskDescBlank)_sitdb(false);
+                  switch(e.key){
+                    case"ArrowUp":
+                      document.getElementById("TaskCreateTitleInput").focus();break;
+                    case"Enter":
+                      document.getElementById("TaskCreateButton").click();break;
+                  }
+                }} />
+                <Field.Error 
+                  className="FieldError"
+                  forceShow={isTaskDescBlank}
+                  match="valueMissing">Required</Field.Error>
+            </Field.Root>
+            <div className="SelectWrapper">
+              <label className="Label">Category</label>
+              <SelectCategory/>
+            </div>
+          </Fieldset.Root><br/>
+          <motion.button
+            id="TaskCreateButton"
+            onClick={(e)=>{
+              let tcti=document.getElementById("TaskCreateTitleInput");
+              let tcdi=document.getElementById("TaskCreateDescInput");
+              let tcc=taskCreateCategory;
+              if(tcti.value&&tcdi.value){
+                setTasks([
+                  ...tasks,
+                  {
+                    title:tcti.value,
+                    desc:tcdi.value,
+                    category:tcc,
+                    id:generateId(10),
+                    checked:false,
+                  }
+                ]);
+                tcti.value="";
+                tcdi.value="";
+              }else{
+                if(!tcti.value)_sittb(true);
+                if(!tcdi.value)_sitdb(true);
+              }
+              e.preventDefault();
+            }}
+            transition={{duration:.15,delay:.05}}
+            initial={{y:5,scale:1,opacity:0,}}
+            whileInView={{y:0,scale:1,opacity:1,}}>
+              Create</motion.button>
+        </Dialog.Popup>
+      </Dialog.Portal>
+    </Dialog.Root>);
+  }
   return(<>
     <div id="HomePageFlexboxWrapper">
       <motion.div
@@ -138,39 +271,8 @@ export const Home=({})=>{
               transition={{duration:.15, delay: .15}}
               initial={{x:5,scale:1,opacity:0,}}
               whileInView={{x:0,scale:1,opacity:1,}}>
-                <Dialog.Root>
-                  <Dialog.Trigger className="DiagTrigger">
-                    <FontAwesomeIcon className="Icon" icon={faSquareCheck} /> Create Task</Dialog.Trigger>
-                  <Dialog.Portal keepMounted>
-                    <Dialog.Backdrop className="DiagBackdrop default_dark" />
-                    <Dialog.Popup className="DiagPopup default_dark">
-                      <Fieldset.Root className="TaskCreateFS">
-                        <Fieldset.Legend className="FSHeader">Create Task</Fieldset.Legend>
-                        {/* <Separator className="FSSeparator" /> */}
-                        <Field.Root className="TaskCreateField">
-                          <Field.Label className="Label">Task Title</Field.Label>
-                          <Field.Control id="TaskCreateTitleInput" placeholder="Enter Task Title" className="Input" />
-                        </Field.Root>
-                        <Field.Root className="TaskCreateField">
-                          <Field.Label className="Label">Task Description</Field.Label>
-                          <Field.Control id="TaskCreateDescInput" placeholder="Enter Task Description" className="Input" />
-                        </Field.Root>
-                      </Fieldset.Root><br/>
-
-                      <motion.button
-                        className="TaskCreateButton"
-                        onClick={(e)=>{
-                          e.preventDefault();
-                        }}
-                        transition={{duration:.15,delay:.05}}
-                        initial={{y:5,scale:1,opacity:0,}}
-                        whileInView={{y:0,scale:1,opacity:1,}}>
-                          Create</motion.button>
-                    </Dialog.Popup>
-                  </Dialog.Portal>
-                </Dialog.Root>
+                <TaskCreateButtonPopup/>
               </motion.div>
-
             <motion.div
               transition={{duration:.15, delay: .25}}
               initial={{x:5,scale:1,opacity:0,}}
