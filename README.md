@@ -1,3 +1,3 @@
 # Todura V3
-Written with Wails
+Written with ~~Wails~~ Tauri
 n werd
