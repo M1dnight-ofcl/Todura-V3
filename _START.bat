@@ -1,4 +1,5 @@
 @echo off
 @cls
-wails dev
+:: wails dev
+yarn tauri dev
 goto :eof
